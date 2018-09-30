@@ -1,0 +1,6 @@
+{
+    "require": {
+        "nopjmp/discord-webhooks": "^0.3.1",
+        "tustin/psn-php": "^2.1"
+    }
+}
