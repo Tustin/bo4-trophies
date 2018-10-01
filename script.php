@@ -10,7 +10,7 @@ $webhook = new \DiscordWebhooks\Client(getenv('BO4_WEBHOOK_URL'));
 
 $client->login(getenv("PSN_PHP_TOKEN"));
 
-$game = $client->game('CUSA02290_00');
+$game = $client->game('CUSA11100_00');
 
 if ($game->hasTrophies() && !file_exists('.found')) {
 
@@ -27,7 +27,6 @@ if ($game->hasTrophies() && !file_exists('.found')) {
     $webhook->username('Bot')->message("{$game->name()} has trophies!")->embed($embed)->send();
 
     file_put_contents('.found', '');
-    
     // sleep(1);
 
     // foreach ($groups as $group) {
@@ -43,3 +42,5 @@ if ($game->hasTrophies() && !file_exists('.found')) {
     //     die();
     // }
 }
+
+file_put_contents('log.txt', 'Ran check.', FILE_APPEND);
