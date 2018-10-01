@@ -43,4 +43,4 @@ if ($game->hasTrophies() && !file_exists('.found')) {
     // }
 }
 
-file_put_contents('log.txt', 'Ran check.', FILE_APPEND);
+file_put_contents('log.txt', 'Ran check.\n', FILE_APPEND);
