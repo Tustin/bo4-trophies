@@ -12,7 +12,7 @@ $client->login(getenv("PSN_PHP_TOKEN"));
 
 $game = $client->game('CUSA02290_00');
 
-if ($game->hasTrophies()) {
+if ($game->hasTrophies() && !file_exists('.found')) {
 
     $embed = new Embed();
 
@@ -25,6 +25,8 @@ if ($game->hasTrophies()) {
     $embed->image($game->imageUrl());
 
     $webhook->username('Bot')->message("{$game->name()} has trophies!")->embed($embed)->send();
+
+    file_put_contents('.found', '');
     
     // sleep(1);
 
