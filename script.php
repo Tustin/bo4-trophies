@@ -49,4 +49,6 @@ if ($game->hasTrophies() && !file_exists('.found')) {
     file_put_contents('trophy.md', $markdown);
 }
 
-file_put_contents('log.txt', sprintf("[%d] Ran check.\n", time()), FILE_APPEND);
+$out = sprintf("[%d] Ran check.\n", time());
+file_put_contents('log.txt', $out, FILE_APPEND);
+echo $out;
