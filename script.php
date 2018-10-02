@@ -12,6 +12,8 @@ $client->login(getenv("PSN_PHP_TOKEN"));
 
 $game = $client->game('CUSA11100_00');
 
+$markdown = "";
+
 if ($game->hasTrophies() && !file_exists('.found')) {
 
     $embed = new Embed();
@@ -19,7 +21,24 @@ if ($game->hasTrophies() && !file_exists('.found')) {
     $groups = $game->trophyGroups();
 
     foreach ($groups as $group) {
+        $markdown .= sprintf("# %s - %d trophies\n\n", $group->name(), $group->trophyCount());
         $embed->field($group->name(), "{$group->trophyCount()} trophies");
+        // Build table.
+        $tableBuilder = new \MaddHatter\MarkdownTable\Builder();
+        $tableBuilder->headers(['Icon', 'Name', 'Detail', 'Rarity']);
+        $tableBuilder->align(['L','C','L', 'C']);
+
+        foreach ($group->trophies() as $trophy) {
+            $tableBuilder->row([
+                sprintf("![%s](%s)", $trophy->name(), $trophy->iconUrl()),
+                $trophy->name(),
+                $trophy->detail(),
+                $trophy->type()
+            ]);
+        }
+
+        $markdown .= $tableBuilder->render();
+        $markdown .= "\n\n";
     }
     
     $embed->image($game->imageUrl());
@@ -27,20 +46,7 @@ if ($game->hasTrophies() && !file_exists('.found')) {
     $webhook->username('Bot')->message("{$game->name()} has trophies!")->embed($embed)->send();
 
     file_put_contents('.found', '');
-    // sleep(1);
-
-    // foreach ($groups as $group) {
-    //     foreach ($group->trophies() as $trophy) {
-    //         $embed = new Embed();
-    //         $embed->thumbnail($trophy->iconUrl());
-    //         $embed->author($trophy->name());
-    //         $embed->description($trophy->detail());
-    //         $embed->field('Rarity', $trophy->type());
-    //         $webhook->username('Bot')->embed($embed)->send();
-    //         sleep(1);
-    //     }
-    //     die();
-    // }
+    file_put_contents('trophy.md', $markdown);
 }
 
-file_put_contents('log.txt', "Ran check.\n", FILE_APPEND);
+file_put_contents('log.txt', sprintf("[%d] Ran check.\n", time()), FILE_APPEND);
